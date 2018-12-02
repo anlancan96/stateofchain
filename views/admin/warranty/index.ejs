@@ -1,0 +1,27 @@
+<% layout('/admin/admin') -%>
+<div class="col-12">
+	<div class="card">
+		<div class="card-header">
+			<strong class="card-title col-8">Warranty Table</strong>
+			<a href="<%=shareall.mdun%>/warranty/add" class="btn btn-success">Add</a>
+		</div>
+		<div class="table-stats  ov-h card-body">
+			<table id="bootstrap-data-table" class="table ">
+				<thead>
+					<tr>
+						<th>STT</th>
+						<th>Address Contract</th>
+						<th>Expire Time</th>
+						<th>Compensation</th>
+						<th>signature Employer</th>
+						<th>signature Buyer</th>
+						<th>Action</th>
+					</tr>
+				</thead>
+				<tbody></tbody>
+			</table>
+		</div>
+	</div>
+</div>
+<% include ../../../public/BE/admin/warranty/index.vinsofts %>
+

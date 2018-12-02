@@ -1,0 +1,53 @@
+<script>
+	window.addEventListener('load', async function () {
+		var acc = await accf();
+		var datas = await ContractMaster.methods.getListContractWarranty(acc).call({
+			from: acc,
+			gasPrice: gasPrice,
+			gasLimit: gasLimit
+		});
+		var dataoke = []
+		var count = 1;
+		for (let i in datas) {
+			const element = datas[i];
+			var contractWarranty = new web3.eth.Contract(abiWarranty, element);
+			var detail = await contractWarranty.methods.convention().call();
+			var dt = [count, element, detail['expireTime'], detail['compensation'], detail['buyer'], detail[
+				'signatureEmployer'], detail['signatureBuyer']]
+			dataoke.push(dt)
+			count++;
+		}
+		var table = $('#bootstrap-data-table').DataTable({
+			data: dataoke,
+			columnDefs: [{
+					targets: [4],
+					render: function (data, type, row) {
+						return row[5] == null ? `false` : `true`
+					}
+				},
+				{
+					targets: [5],
+					render: function (data, type, row) {
+						return row[6] == null ? `false` : `true`
+					}
+				},
+				{
+					targets: [6],
+					render: function (data, type, row) {
+						return row[4] == 0 ?
+							`<button class='btn detail'>Detail</button>  <button class='btn byer'>Add Byer</button>` :
+							`<button class='btn detail'>Detail</button>`
+					}
+				}
+			]
+		});
+		$('#bootstrap-data-table tbody').on('click', 'button.btn.detail', function () {
+			var data = table.row($(this).parents('tr')).data();
+			location.href = basenow + "detail/" + data[1];
+		});
+		$('#bootstrap-data-table tbody').on('click', 'button.btn.byer', function () {
+			var data = table.row($(this).parents('tr')).data();
+			location.href = basenow + "byer/" + data[1];
+		});
+	})
+</script>

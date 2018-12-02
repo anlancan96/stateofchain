@@ -1,0 +1,56 @@
+<script async type="text/javascript" src="/jquery.qrcode.min.js"></script>
+<script>
+    window.addEventListener('load', async function () {
+        acc = await accf();
+        contractWarranty = new web3.eth.Contract(abiWarranty, '<%=id%>');
+        var detail = await contractWarranty.methods.convention().call();
+        //get signature for buyer and seller
+        if (detail['signatureEmployer']) {
+            $('#qrcode1').qrcode(detail['signatureEmployer']);
+        }
+        if (detail['signatureBuyer']) {
+            $('#qrcode2').qrcode(detail['signatureBuyer']);
+        }
+        $("#compensation").text(detail["compensation"])
+        $("#expireTime").text(detail["expireTime"])
+        var product = await ContractProduct.methods.productDetail(detail['idProduct']).call({
+            from: acc
+        });
+        $("#nameProduct").text(product["name"])
+        $("#manufacturerProduct").text(product['manufacturer'])
+        $("#MFG").text(product['MFG'])
+        $("#EXP").text(product['EXP'])
+        $("#state").text(product['state'])
+        $("#productId").text(product['id'])
+
+        //get ben A
+        var uA = await ContractMaster.methods.getAgency(detail['employer']).call();
+        $("#nameA").text(uA['name'])
+        $("#phoneA").text(uA['phoneNumber'])
+        $("#homeA").text(uA['homeAddr'])
+        $("#addressA").text(detail['employer'])
+
+        //get ben B
+        var uB = await ContractCustomer.methods.accountDetail(detail['buyer']).call();
+
+        $("#nameB").text(uB['name'])
+        $("#phoneB").text(uB['phoneNumber'])
+        $("#homeB").text(uB['homeAddr'])
+        $("#addressB").text(detail['buyer'])
+
+    })
+
+
+    accf().then(acc => {
+        ContractCustomer.methods.getAll(10, 0).call({
+            from: acc
+        }).then(datas => {
+            datas.forEach(async (v, k) => {
+                if (v["owner"] != 0) {
+                    $("#idByer").append(
+                        `<option value="${v["owner"]}">${v["name"]}</option>`)
+                }
+            })
+        });
+    });
+</script>

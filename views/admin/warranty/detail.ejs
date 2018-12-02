@@ -1,0 +1,126 @@
+<% layout('/admin/admin') -%>
+
+<div class="col-lg-12">
+    <div class="card">
+    <div class="card-header" style="text-align: center">Detail Warranty <%=id%></div>
+        <div class="row">
+
+            <div class="col-md-4">
+                <aside class="profile-nav alt">
+                    <section class="card">
+                        <div class="card-header user-header alt bg-dark">
+                            <div class="media">
+                                <a href="#">
+                                    <img class="align-self-center rounded-circle mr-3" style="width:85px; height:85px;" alt="" src="BE/images/admin.jpg">
+                                </a>
+                                <div class="media-body">
+                                    <h2 class="text-light display-6" id="nameA"></h2>
+                                    <p id="phoneA"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">
+                                <a href="#"> <i class="fa fa-tasks"></i> Home Address <span class="badge badge-danger pull-right" id="homeA"></span></a>
+                            </li>
+                            <li class="list-group-item">
+                                <a href="#"> <i class="fa fa-bell-o"></i> Type <span class="badge badge-success pull-right">Seller</span></a>
+                            </li>
+                            <li class="list-group-item">
+                                <a href="#"> <i class="fa fa-comments-o"></i> Address ETH <span class="badge badge-warning pull-right r-activity" id="addressA"></span></a>
+                            </li>
+                            <li class="list-group-item">
+                                <a href="#" class="text-center"> <i class="fa fa-pencil-square-o"></i> Signature <div id="qrcode1"></div></a>
+                            </li>
+                        </ul>
+
+                    </section>
+                </aside>
+            </div>
+
+            <div class="col-md-4">
+                <aside class="profile-nav alt">
+                    <section class="card">
+                        <div class="twt-feed blue-bg">
+                            <div class="corner-ribon black-ribon">
+                                <i class="fa fa-twitter"></i>
+                            </div>
+                            <div class="fa fa-twitter wtt-mark"></div>
+
+                            <div class="media">
+                                <a href="#">
+                                    <img class="align-self-center rounded-circle mr-3" style="width:85px; height:85px;" alt="" src="BE/images/admin.jpg">
+                                </a>
+                                <div class="media-body">
+                                    <h2 class="text-white display-6" id="nameProduct"></h2>
+                                    <p class="text-light" id="manufacturerProduct"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">
+                                <a href="#"> <i class="fa fa-envelope-o"></i> Product Id <span class="badge badge-primary pull-right" id="productId"></span></a>
+                            </li>
+                            <li class="list-group-item">
+                                <a href="#"> <i class="fa fa-tasks"></i> MFG <span class="badge badge-danger pull-right" id="MFG"></span></a>
+                            </li>
+                            <li class="list-group-item">
+                                <a href="#"> <i class="fa fa-bell-o"></i> EXP <span class="badge badge-success pull-right" id="EXP"></span></a>
+                            </li>
+                            <li class="list-group-item">
+                                <a href="#"> <i class="fa fa-comments-o"></i> STATE <span class="badge badge-warning pull-right r-activity" id="state"></span></a>
+                            </li>
+                             <li class="list-group-item">
+                                <a href="#"> <i class="fa fa-comments-o"></i> Compensation <span class="badge badge-warning pull-right r-activity" id="compensation"></span></a>
+                            </li>
+                             <li class="list-group-item">
+                                <a href="#"> <i class="fa fa-comments-o"></i> Expire Time <span class="badge badge-warning pull-right r-activity" id="expireTime"></span></a>
+                            </li>
+                        </ul>
+
+                    </section>
+                </aside>
+            </div>
+
+             <div class="col-md-4">
+                <aside class="profile-nav alt">
+                    <section class="card">
+                        <div class="card-header user-header alt bg-dark">
+                            <div class="media">
+                                <a href="#">
+                                    <img class="align-self-center rounded-circle mr-3" style="width:85px; height:85px;" alt="" src="BE/images/admin.jpg">
+                                </a>
+                                <div class="media-body">
+                                    <h2 class="text-light display-6" id="nameB"></h2>
+                                    <p id="phoneB"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">
+                                <a href="#"> <i class="fa fa-envelope-o"></i> Home Address <span class="badge badge-danger pull-right" id="homeB"></span></a>
+                            </li>
+                            <li class="list-group-item">
+                                    <a href="#"> <i class="fa fa-bell-o"></i> Type <span class="badge badge-success pull-right">Buyer</span></a>
+                                </li>
+                            <li class="list-group-item">
+                                <a href="#"> <i class="fa fa-comments-o"></i> Address ETH <span class="badge badge-warning pull-right r-activity" id="addressB"></span></a>
+                            </li>
+                            <li class="list-group-item">
+                                <a href="#" class="text-center"> <i class="fa fa-pencil-square-o"></i> Signature <div id="qrcode2"></div></span>
+                                </a>
+                            </li>
+                        </ul>
+
+                    </section>
+                </aside>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<% include ../../../public/BE/admin/warranty/detail.vinsofts %>

@@ -1,0 +1,40 @@
+<script>
+
+    async function btnSubmit() {
+        var acc = await accf();
+        var idByer = $("#idByer").val();
+        var contractWarranty = new web3.eth.Contract(abiWarranty, '<%=id%>');
+
+        const msgHash = web3.eth.accounts.hashMessage('<%=id%>')
+
+        web3.eth.personal.sign(msgHash, acc, function(err, res) {
+            var sellerSignature = res
+            
+            contractWarranty.methods.createParnter(idByer, sellerSignature, msgHash).send({
+                from: acc,
+                gasPrice: gasPrice,
+                gasLimit: gasLimit
+            })
+            .on('transactionHash', function (transactionHash) {
+                    console.log('transactionHash', transactionHash)
+                    history.go(-1)
+                })
+            .then((e) => {
+                console.log(e);
+                history.go(-1)
+            });
+        })
+    } 
+
+    accf().then(acc=>{
+        ContractCustomer.methods.getAll(10,0).call({
+            from: acc
+        }).then(datas => {
+            datas.forEach(async (v, k) => {
+                if(v["owner"]!=0){
+                $("#idByer").append(`<option value="${v["owner"]}">${v["name"]}</option>`)
+                }
+            })
+        });
+    });
+</script>

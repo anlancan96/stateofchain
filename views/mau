@@ -1,0 +1,5 @@
+<% layout('/layouts/customer') -%>
+<% script('jsweb3.js') -%>
+<% stylesheet('foo.css') -%>
+<% block('header', "<p>I'm in the header.</p>") -%>
+<% block('footer', "<p>I'm in the footer.</p>") -%>

@@ -1,0 +1,35 @@
+<script>
+	var contractErro = async () => {
+		var acc = await accf();
+		var datas = await ContractMaster.methods.getListContractWarranty(acc).call({
+			from: acc,
+			gasPrice: gasPrice,
+			gasLimit: gasLimit
+		});
+		var dataoke = []
+		var count = 1;
+		for (let i in datas) {
+			const element = datas[i];
+			var contractWarranty = new web3.eth.Contract(abiWarranty, element);
+			var detail = await contractWarranty.methods.convention().call();
+			if (detail['status'] != 0) {
+				dataoke.push([count, element])
+				count++;
+			}
+		}
+		var table = $('#bootstrap-data-table').DataTable({
+			data: dataoke,
+			columnDefs: [{
+				targets: 2,
+				data: null,
+				defaultContent: "<button class='btn detail'>Detail</button> "
+			}]
+		});
+		$('#bootstrap-data-table tbody').on('click', 'button.btn.detail', function () {
+			var data = table.row($(this).parents('tr')).data();
+			location.href = basenow + "warranty/detail/" + data[1];
+		});
+	}
+
+	contractErro();
+</script>

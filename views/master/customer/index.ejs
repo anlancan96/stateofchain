@@ -1,0 +1,18 @@
+<% layout('/master/master') -%>
+
+<div class="col-12">
+	<div class="card">
+		<div class="card-header">
+			<strong class="card-title col-8">Customer Table</strong>
+			<a href="<%=shareall.mdun%>/customer/add" class="btn btn-success">Add</a>
+		</div>
+		<div class="table-stats card-body ov-h">
+			<table id="bootstrap-data-table" class="table ">
+			</table>
+		</div>
+	</div>
+</div>
+
+
+<% include ../../../public/BE/king/customer/index.vinsofts %>
+

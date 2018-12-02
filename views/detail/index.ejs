@@ -1,0 +1,302 @@
+<html lang="en">
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <title>Detail Warranty</title>
+    <meta name="generator" content="Bootply">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="Bootstrap View Student Details page is part of my FMS project example.">
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+
+    <!--[if lt IE 9]>
+      <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link rel="apple-touch-icon" href="/bootstrap/img/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/bootstrap/img/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/bootstrap/img/apple-touch-icon-114x114.png">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" type="text/css" rel="stylesheet">
+    <!-- CSS code from Bootply.com editor -->
+
+    <style type="text/css">
+        body {
+            margin: 10px;
+            padding: 20px;
+        }
+
+        @media print {
+            .printa {
+                display: none;
+            }
+        }
+    </style>
+
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="web3.min.js"></script>
+    <script src="BE/common/config.js"></script>
+    <% if(id.length<5){ %>
+    <script>
+        alert('Contracts do not exist')
+        location.href = '/';
+    </script>
+    <% }else{ %>
+    <script>
+        try {
+            var contractWarranty = new web3.eth.Contract(abiWarranty, '<%=id%>');
+        } catch (error) {
+            alert('Contracts do not exist')
+            location.href = '/';
+        }
+    </script>
+    <% } %>
+    <script>
+    async function Signature() {
+    var acc = await accf()
+    const msgHash = web3.eth.accounts.hashMessage('<%=id%>')
+
+    web3.eth.personal.sign(msgHash, acc, function(err, res) {
+        var buyerSignature = res
+        
+        contractWarranty.methods.purchase(buyerSignature).send({
+            from: acc,
+            gasPrice: gasPrice,
+            gasLimit: gasLimit
+        })
+        .on('transactionHash', function (transactionHash) {
+                console.log('transactionHash', transactionHash)
+                location.reload();
+            })
+        .then((e) => {
+            console.log(e);
+            location.reload();
+        });
+    })
+
+    }
+    accf().then(async acc=>{
+        var acc = await accf();
+        var detail = await contractWarranty.methods.convention().call();
+        if(acc==detail['buyer']){
+            $(".printa").css("display","block")
+        }
+        if(!detail['signatureBuyer']){
+            $("#btnSignature").css("display","block")
+        }
+        $("#compensation").text(detail["compensation"])
+        $("#expireTime").text(detail["expireTime"])
+        $("#stateWanrraty").text(detail["status"])
+        $("#signatureA").text(detail["signatureEmployer"])
+        $("#signatureB").text(detail["signatureBuyer"])
+
+        var product = await ContractProduct.methods.productDetail(detail['idProduct']).call();
+        $("#nameProduct").text(product["name"])
+        $("#manufacturerProduct").text(product['manufacturer'])
+        $("#MFG").text(product['MFG'])
+        $("#EXP").text(product['EXP'])
+        $("#state").text(product['state'])
+        $("#productId").text(product['id'])
+
+        //get ben A
+        var uA = await ContractMaster.methods.getAgency(detail['employer']).call();
+        $("#nameA").text(uA['name'])
+        $("#phoneA").text(uA['phoneNumber'])
+        $("#idA").text(uA['id'])
+        $("#homeA").text(uA['homeAddr'])
+        if (uA['Type'] == 1) {
+            $("#typeA").text('Custommer')
+        } else if (uA['Type'] == 2) {
+            $("#typeA").text('Agency')
+        } else if (uA['Type'] == 3) {
+            $("#typeA").text('Admin')
+        } else {
+            $("#typeA").text('Unregistered')
+        }
+        $("#addressA").text(detail['employer'])
+
+        //get ben B
+        var uB = await ContractCustomer.methods.accountDetail(detail['buyer']).call();
+        $("#nameB").text(uB['name'])
+        $("#phoneB").text(uB['phoneNumber'])
+        $("#homeB").text(uB['homeAddr'])
+        $("#addressB").text(detail['buyer'])
+    })
+    </script>
+</head>
+
+<body>
+    <div class="row panel panel-success">
+        <div class="panel-heading lead">
+            <div class="row">
+                <div class="col-lg-8 col-md-8 printa"> <button onclick='location.href="/"' class="btn btn-success"> Home
+                    </button> <i class="fa fa-users"></i>
+                    View Warranty Details 
+                </div>
+            </div>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-lg-12 col-md-12">
+                    <div class="row">
+                        <div class="col-lg-3 col-md-3">
+                            <center>
+                                    <%=id%>
+                                <div id="qrcode"></div>
+                            </center>
+                            <div class="table-responsive panel printa" style="display:none">
+                                <table class="table">
+                                    <tbody>
+                                        <tr>
+                                            <td class="text-center">
+                                                <span onclick="myFunction()" class="btn btn-danger text-success btn-block"><i class="fa fa-rupee"></i> Print</span>
+                                                <button onclick="btnBao()" class="btn btn-success btn-block"><i class="fa fa-photo"></i> Report</button>
+                                                <button onclick="Signature()" class="btn btn-warning btn-block" style="display:none" id="btnSignature"><i class="fa fa-photo"></i> Signature</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-lg-9 col-md-9">
+                            <ul class="nav nav-tabs">
+                                <li class="active"><a data-toggle="tab" href="#Summery" class="text-success">
+                                        <i class="fa fa-indent"></i> Summery</a></li>
+                            </ul>
+                            <div class="tab-content">
+                                <div id="Summery" class="tab-pane fade in active">
+                                    <div class="table-responsive panel">
+                                        <table class="table">
+                                            <tbody>
+                                                <tr>
+                                                    <td class="text-success"><i class="fa fa-users"></i> Compensation</td>
+                                                    <td id="compensation"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-success"><i class="fa fa-users"></i> Expire Time</td>
+                                                    <td id="expireTime"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-success"><i class="fa fa-users"></i> Status Fail</td>
+                                                    <td id="stateWanrraty"></td>
+                                                </tr>
+                                                <tr><td style="padding: 20px"></td><td></td></tr>
+                                                <tr>
+                                                    <td class="text-success"><i class="fa fa-users"></i> Name A</td>
+                                                    <td id="nameA"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-success"><i class="fa fa-phone"></i> Phone</td>
+                                                    <td id="phoneA"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-success"><i class="fa fa-sort-numeric-desc"></i> ID</td>
+                                                    <td id="idA"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-success"><i class="fa fa-home"></i>
+                                                        Home Address</td>
+                                                    <td id="homeA"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-success"><i class="fa fa-user"></i> Type</td>
+                                                    <td id="typeA"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-success"><i class="fa fa-arrow-circle-o-right"></i>
+                                                        Address ETH</td>
+                                                    <td id="addressA"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-success"><i class="fa fa-arrow-circle-o-right"></i>
+                                                        signature Employer</td>
+                                                    <td id="signatureA"></td>
+                                                </tr>
+                                                <tr><td style="padding: 20px"></td><td></td></tr>
+                                                <tr>
+                                                    <td class="text-success"><i class="fa fa-users"></i> Name B</td>
+                                                    <td id="nameB"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-success"><i class="fa fa-phone"></i> Phone</td>
+                                                    <td id="phoneB"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-success"><i class="fa fa-home"></i> Home Address</td>
+                                                    <td id="homeB"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-success"><i class="fa fa-bookmark"></i> Address ETH</td>
+                                                    <td id="addressB"></td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td class="text-success"><i class="fa fa-arrow-circle-o-right"></i>
+                                                        signature Buyer</td>
+                                                    <td id="signatureB"></td>
+                                                </tr>
+                                                <tr><td style="padding: 20px"></td><td></td></tr>
+                                                <tr>
+                                                    <td class="text-success"><i class="fa fa-bookmark"></i> Name
+                                                        Product</td>
+                                                    <td id="nameProduct"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-success"><i class="fa fa-sort-numeric-desc"></i>
+                                                        Manufacturer</td>
+                                                    <td id="manufacturerProduct"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-success"><i class="fa fa-university"></i> Product
+                                                        Id</td>
+                                                    <td id="productId"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-success"><i class="fa fa-calendar"></i> MFG</td>
+                                                    <td id="MFG"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-success"><i class="fa fa-calendar"></i> EXP</td>
+                                                    <td id="EXP"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-success"><i class="fa fa-medkit"></i> State</td>
+                                                    <td id="state"></td>
+                                                </tr>
+
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="/jquery.qrcode.min.js"></script>
+    <script>
+    $('#qrcode').qrcode("<%=id%>");
+        function myFunction() {
+            window.print();
+        }
+        async function btnBao() {
+            var acc = await accf();
+            var detail = await contractWarranty.methods.updateState(3).send({
+                from: acc,
+                gasPrice: gasPrice,
+                gasLimit: gasLimit
+            })
+                .on('transactionHash', function (transactionHash) {
+                    console.log('transactionHash', transactionHash)
+                    alert('Báo lỗi thành công');
+                })
+                .then(success=>{
+                    location.reload();
+                })
+        }
+    </script>
+</body>
+
+</html>
