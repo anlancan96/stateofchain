@@ -1,4 +1,5 @@
-``` Node version: v10.11.0
+``` 
+    Node version: v10.11.0
     NPM version: v6.4.1    
 ```
 ### Cấu trúc Project
